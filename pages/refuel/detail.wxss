@@ -1,0 +1,113 @@
+.container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 20rpx;
+}
+
+.station-card,
+.refuel-card,
+.payment-card,
+.remark-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.station-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.station-address {
+  font-size: 28rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
+}
+
+.refuel-time {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 24rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.value {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.voucher-amount {
+  color: #1890ff;
+}
+
+.link-text {
+  font-size: 24rpx;
+  color: #1890ff;
+  margin-left: 10rpx;
+}
+
+.actual-amount {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.remark-content {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.loading-icon {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  color: #999;
+  font-size: 28rpx;
+  margin-top: 20rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 

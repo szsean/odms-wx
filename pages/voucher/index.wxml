@@ -1,0 +1,72 @@
+<view class="container">
+  <!-- 状态切换 -->
+  <view class="tabs">
+    <view
+      class="tab-item {{status === 0 ? 'active' : ''}}"
+      data-status="0"
+      bindtap="switchStatus"
+    >
+      未使用
+    </view>
+    <view
+      class="tab-item {{status === 1 ? 'active' : ''}}"
+      data-status="1"
+      bindtap="switchStatus"
+    >
+      已使用
+    </view>
+    <view
+      class="tab-item {{status === 2 ? 'active' : ''}}"
+      data-status="2"
+      bindtap="switchStatus"
+    >
+      已过期
+    </view>
+  </view>
+
+  <!-- 电子券列表 -->
+  <view class="voucher-list">
+    <block wx:if="{{list.length > 0}}">
+      <view
+        class="voucher-item"
+        wx:for="{{list}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goDetail"
+      >
+        <view class="voucher-info">
+          <view class="amount">
+            <text class="unit">¥</text>
+            <text class="value">{{formatAmount(item.amount)}}</text>
+          </view>
+          <view class="detail">
+            <view class="name">{{item.oilProductName}}</view>
+            <view class="date">有效期至: {{formatDate(item.validEndTime)}}</view>
+          </view>
+        </view>
+        <view class="voucher-status">
+          <image
+            class="status-icon"
+            src="/static/images/{{status === 0 ? 'unused' : status === 1 ? 'used' : 'expired'}}.png"
+            mode="aspectFit"
+          ></image>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty">
+        <image class="empty-icon" src="/static/images/empty.png" mode="aspectFit"></image>
+        <text class="empty-text">暂无电子券</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+  <view class="no-more" wx:if="{{!loading && !hasMore && list.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+</view> 

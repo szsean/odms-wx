@@ -1,0 +1,67 @@
+<view class="container">
+  <block wx:if="{{!loading && detail}}">
+    <!-- 加油站信息 -->
+    <view class="station-card">
+      <view class="station-name">{{detail.gasStationName}}</view>
+      <view class="station-address">{{detail.gasStationAddress}}</view>
+      <view class="refuel-time">加油时间：{{formatDateTime(detail.refuelTime)}}</view>
+    </view>
+
+    <!-- 加油信息 -->
+    <view class="refuel-card">
+      <view class="card-title">加油信息</view>
+      <view class="info-item">
+        <text class="label">油品类型</text>
+        <text class="value">{{detail.oilProductName}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">单价</text>
+        <text class="value">¥{{formatAmount(detail.unitPrice)}}/升</text>
+      </view>
+      <view class="info-item">
+        <text class="label">加油量</text>
+        <text class="value">{{detail.volume}}升</text>
+      </view>
+      <view class="info-item">
+        <text class="label">总金额</text>
+        <text class="value">¥{{formatAmount(detail.totalAmount)}}</text>
+      </view>
+    </view>
+
+    <!-- 支付信息 -->
+    <view class="payment-card">
+      <view class="card-title">支付信息</view>
+      <view class="info-item">
+        <text class="label">电子券抵扣</text>
+        <text class="value voucher-amount" bindtap="goVoucherDetail">
+          ¥{{formatAmount(detail.voucherAmount)}}
+          <text class="link-text" wx:if="{{detail.voucherId}}">查看详情 ></text>
+        </text>
+      </view>
+      <view class="info-item">
+        <text class="label">实付金额</text>
+        <text class="value actual-amount">¥{{formatAmount(detail.actualAmount)}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">支付方式</text>
+        <text class="value">{{detail.paymentMethod}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">流水号</text>
+        <text class="value">{{detail.transactionNo}}</text>
+      </view>
+    </view>
+
+    <!-- 备注信息 -->
+    <view class="remark-card" wx:if="{{detail.remark}}">
+      <view class="card-title">备注</view>
+      <view class="remark-content">{{detail.remark}}</view>
+    </view>
+  </block>
+
+  <!-- 加载中 -->
+  <view class="loading-screen" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view> 

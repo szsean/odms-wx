@@ -1,0 +1,82 @@
+<view class="container">
+  <block wx:if="{{!loading && detail}}">
+    <!-- 电子券信息 -->
+    <view class="voucher-card">
+      <view class="amount">
+        <text class="unit">¥</text>
+        <text class="value">{{formatAmount(detail.amount)}}</text>
+      </view>
+      <view class="status" style="color: {{getStatusColor(detail.status)}}">
+        {{getStatusText(detail.status)}}
+      </view>
+    </view>
+
+    <!-- 二维码 -->
+    <block wx:if="{{detail.status === 0}}">
+      <view class="qrcode-wrapper" bindtap="previewQrCode">
+        <image
+          class="qrcode"
+          src="{{qrCode}}"
+          mode="aspectFit"
+          wx:if="{{qrCode}}"
+        ></image>
+        <view class="loading" wx:else>
+          <view class="loading-icon"></view>
+          <text class="loading-text">二维码加载中...</text>
+        </view>
+        <text class="qrcode-tip">点击放大查看</text>
+      </view>
+    </block>
+
+    <!-- 详细信息 -->
+    <view class="info-card">
+      <view class="info-item">
+        <text class="label">电子券号</text>
+        <text class="value">{{detail.voucherNo}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">油品类型</text>
+        <text class="value">{{detail.oilProductName}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">有效期</text>
+        <text class="value">{{formatDateTime(detail.validStartTime)}} 至 {{formatDateTime(detail.validEndTime)}}</text>
+      </view>
+      <block wx:if="{{detail.status === 1}}">
+        <view class="info-item">
+          <text class="label">使用时间</text>
+          <text class="value">{{formatDateTime(detail.useTime)}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">加油站</text>
+          <text class="value">{{detail.gasStationName}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">加油量</text>
+          <text class="value">{{detail.volume}}升</text>
+        </view>
+        <view class="info-item">
+          <text class="label">实际金额</text>
+          <text class="value">¥{{formatAmount(detail.actualAmount)}}</text>
+        </view>
+      </block>
+    </view>
+
+    <!-- 使用说明 -->
+    <view class="tips-card" wx:if="{{detail.status === 0}}">
+      <view class="tips-title">使用说明</view>
+      <view class="tips-content">
+        <view class="tip-item">1. 在加油站加油时出示二维码</view>
+        <view class="tip-item">2. 工作人员扫描后即可抵扣相应金额</view>
+        <view class="tip-item">3. 每张电子券仅可使用一次</view>
+        <view class="tip-item">4. 请在有效期内使用</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 加载中 -->
+  <view class="loading-screen" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view> 

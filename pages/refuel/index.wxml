@@ -1,0 +1,54 @@
+<view class="container">
+  <!-- 加油记录列表 -->
+  <view class="record-list">
+    <block wx:if="{{list.length > 0}}">
+      <view
+        class="record-item"
+        wx:for="{{list}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goDetail"
+      >
+        <view class="record-header">
+          <text class="station-name">{{item.gasStationName}}</text>
+          <text class="time">{{formatDateTime(item.refuelTime)}}</text>
+        </view>
+        <view class="record-content">
+          <view class="oil-info">
+            <text class="oil-name">{{item.oilProductName}}</text>
+            <text class="volume">{{item.volume}}升</text>
+          </view>
+          <view class="amount-info">
+            <view class="total-amount">
+              <text class="label">总金额：</text>
+              <text class="value">¥{{formatAmount(item.totalAmount)}}</text>
+            </view>
+            <view class="voucher-amount">
+              <text class="label">电子券抵扣：</text>
+              <text class="value">¥{{formatAmount(item.voucherAmount)}}</text>
+            </view>
+            <view class="actual-amount">
+              <text class="label">实付金额：</text>
+              <text class="value">¥{{formatAmount(item.actualAmount)}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty">
+        <image class="empty-icon" src="/static/images/empty.png" mode="aspectFit"></image>
+        <text class="empty-text">暂无加油记录</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+  <view class="no-more" wx:if="{{!loading && !hasMore && list.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+</view> 
