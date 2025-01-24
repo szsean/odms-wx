@@ -15,10 +15,7 @@ Page({
   // 切换登录方式
   switchLoginType() {
     this.setData({
-      loginType: this.data.loginType === 'code' ? 'password' : 'code',
-      phone: '',
-      code: '',
-      password: ''
+      loginType: this.data.loginType === 'code' ? 'password' : 'code'
     })
   },
 
@@ -49,7 +46,6 @@ Page({
       return
     }
 
-    // 验证手机号
     const phone = this.data.phone.trim()
     if (!phone) {
       wx.showToast({
@@ -58,7 +54,8 @@ Page({
       })
       return
     }
-    if (!/^1[3-9]\d{9}$/.test(phone)) {
+
+    if (!/^1\d{10}$/.test(phone)) {
       wx.showToast({
         title: '手机号格式不正确',
         icon: 'none'
@@ -66,42 +63,33 @@ Page({
       return
     }
 
-    try {
-      await sendCode({ phone })
-      wx.showToast({
-        title: '验证码已发送',
-        icon: 'success'
-      })
-      // 开始倒计时
-      this.setData({
-        countdown: 60
-      })
-      this.startCountdown()
-    } catch (error) {
-      console.error('发送验证码失败:', error)
-    }
+    // 模拟发送验证码
+    wx.showToast({
+      title: '验证码发送成功',
+      icon: 'success'
+    })
+    
+    this.startCountdown()
   },
 
-  // 倒计时
+  // 开始倒计时
   startCountdown() {
-    if (this.data.countdown <= 0) {
-      return
-    }
-    setTimeout(() => {
+    this.setData({
+      countdown: 60
+    })
+
+    const timer = setInterval(() => {
+      if (this.data.countdown <= 1) {
+        clearInterval(timer)
+      }
       this.setData({
         countdown: this.data.countdown - 1
       })
-      this.startCountdown()
     }, 1000)
   },
 
   // 提交登录
   async submitLogin() {
-    if (this.data.submitLoading) {
-      return
-    }
-
-    // 验证手机号
     const phone = this.data.phone.trim()
     if (!phone) {
       wx.showToast({
@@ -110,7 +98,8 @@ Page({
       })
       return
     }
-    if (!/^1[3-9]\d{9}$/.test(phone)) {
+
+    if (!/^1\d{10}$/.test(phone)) {
       wx.showToast({
         title: '手机号格式不正确',
         icon: 'none'
@@ -119,94 +108,73 @@ Page({
     }
 
     if (this.data.loginType === 'code') {
-      // 验证码登录
-      const code = this.data.code.trim()
-      if (!code) {
+      if (!this.data.code) {
         wx.showToast({
           title: '请输入验证码',
           icon: 'none'
         })
         return
       }
-      if (!/^\d{6}$/.test(code)) {
-        wx.showToast({
-          title: '验证码格式不正确',
-          icon: 'none'
-        })
-        return
-      }
-
-      this.setData({
-        submitLoading: true
-      })
-      try {
-        const res = await loginByCode({
-          phone,
-          code
-        })
-        // 保存token和用户信息
-        wx.setStorageSync('token', res.data.token)
-        wx.setStorageSync('userInfo', res.data.userInfo)
-        app.globalData.token = res.data.token
-        app.globalData.userInfo = res.data.userInfo
-        // 跳转到电子券页面
-        wx.switchTab({
-          url: '/pages/voucher/index'
-        })
-      } catch (error) {
-        console.error('登录失败:', error)
-        this.setData({
-          submitLoading: false
-        })
-      }
     } else {
-      // 密码登录
-      const password = this.data.password.trim()
-      if (!password) {
+      if (!this.data.password) {
         wx.showToast({
           title: '请输入密码',
           icon: 'none'
         })
         return
       }
-      if (password.length < 6) {
-        wx.showToast({
-          title: '密码不能少于6位',
-          icon: 'none'
-        })
-        return
-      }
+    }
 
-      this.setData({
-        submitLoading: true
+    this.setData({ submitLoading: true })
+
+    try {
+      // 模拟登录成功
+      const mockUserInfo = {
+        id: 1,
+        name: '张三',
+        phone: phone,
+        enterpriseName: 'XX运输公司',
+        enterprisePhone: '0571-88888888',
+        enterpriseAddress: '浙江省杭州市西湖区xxx路xx号',
+        employeeNo: 'D001',
+        createTime: '2024-01-01'
+      }
+      
+      // 保存登录信息
+      wx.setStorageSync('token', 'mock_token_' + Date.now())
+      wx.setStorageSync('userInfo', mockUserInfo)
+      
+      // 获取全局App实例
+      const app = getApp()
+      app.globalData.token = 'mock_token_' + Date.now()
+      app.globalData.userInfo = mockUserInfo
+
+      wx.showToast({
+        title: '登录成功',
+        icon: 'success'
       })
-      try {
-        const res = await loginByPassword({
-          phone,
-          password
-        })
-        // 保存token和用户信息
-        wx.setStorageSync('token', res.data.token)
-        wx.setStorageSync('userInfo', res.data.userInfo)
-        app.globalData.token = res.data.token
-        app.globalData.userInfo = res.data.userInfo
-        // 跳转到电子券页面
+
+      // 跳转到电子券页面
+      setTimeout(() => {
         wx.switchTab({
           url: '/pages/voucher/index'
         })
-      } catch (error) {
-        console.error('登录失败:', error)
-        this.setData({
-          submitLoading: false
-        })
-      }
+      }, 1500)
+    } catch (error) {
+      console.error('登录失败:', error)
+      wx.showToast({
+        title: '登录失败',
+        icon: 'error'
+      })
+    } finally {
+      this.setData({ submitLoading: false })
     }
   },
 
   // 跳转到重置密码页面
   goResetPassword() {
     wx.navigateTo({
-      url: '/pages/user/password?type=reset'
+      url: '/pages/user/password'
     })
   }
 }) 
